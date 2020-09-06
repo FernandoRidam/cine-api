@@ -14,10 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-  return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//   return $request->user();
+// });
 
-Route::get('/ok', function() {
-  return ['status' => true ];
+Route::namespace('Api')->group( function() {
+  Route::prefix('genres')->group( function() {
+    Route::get('/', 'GenreController@index')->name('genres');
+    Route::get('/{id}', 'GenreController@show')->name('genre');
+  });
+
+  Route::prefix('movies')->group( function() {
+    // Route::get('/', 'MovieController@index')->name('movies');
+    Route::get('/show/{id}', 'MovieController@show')->name('movie');
+    Route::get('/search/{query}', 'MovieController@search')->name('movies_search');
+    Route::get('/trending', 'MovieController@trending')->name('movies_trending');
+    Route::get('/discover', 'MovieController@discover')->name('movies_discover');
+  });
 });
